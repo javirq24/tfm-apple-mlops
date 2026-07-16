@@ -11,6 +11,13 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
+NLTK_DATA_PATH = PROJECT_ROOT / "nltk_data"
+
+os.environ["NLTK_DATA"] = str(NLTK_DATA_PATH)
+
+if str(NLTK_DATA_PATH) not in nltk.data.path:
+    nltk.data.path.insert(0, str(NLTK_DATA_PATH))
+
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
