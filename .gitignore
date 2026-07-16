@@ -49,3 +49,6 @@ Desktop.ini
 build/
 dist/
 *.egg-info/
+
+# Evidencias locales de ejecución
+evidencias/
