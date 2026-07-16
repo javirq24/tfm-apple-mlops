@@ -1,0 +1,19 @@
+# Normalizar automáticamente los saltos de línea
+* text=auto
+
+# Código y archivos de configuración
+*.py text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# CSV conservado con LF
+*.csv text eol=lf
+
+# Archivos binarios
+*.joblib binary
+*.xlsx binary
+*.png binary
+*.jpg binary
+*.pdf binary
