@@ -1,0 +1,5 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
+
+name: tfm-apple-sentiment-jrq
+auth_mode: key
+description: Endpoint online del modelo de sentimiento sobre Apple.

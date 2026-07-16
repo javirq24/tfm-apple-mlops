@@ -1,0 +1,21 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+
+name: blue
+endpoint_name: tfm-apple-sentiment-jrq
+
+model: azureml:apple-sentiment-model:1
+
+code_configuration:
+  code: ..
+  scoring_script: src/score.py
+
+environment:
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
+  conda_file: ../conda.yml
+
+instance_type: Standard_DS2_v2
+instance_count: 1
+
+request_settings:
+  request_timeout_ms: 10000
+  max_concurrent_requests_per_instance: 1
