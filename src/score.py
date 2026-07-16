@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -8,28 +9,31 @@ import nltk
 import numpy as np
 
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# Necesario para deserializar TextCleaner desde el joblib.
+from src import preprocess  # noqa: F401
+
+
 model = None
 
 
 def init() -> None:
     """
-    Azure ejecuta esta función una sola vez cuando arranca
-    el contenedor del endpoint.
+    Azure ejecuta esta función una sola vez al iniciar el contenedor.
     """
     global model
 
-    # Raíz del código enviado a Azure.
-    project_root = Path(__file__).resolve().parent.parent
-
-    # Stopwords incluidas dentro del proyecto.
-    nltk_data_path = project_root / "nltk_data"
+    nltk_data_path = PROJECT_ROOT / "nltk_data"
 
     os.environ["NLTK_DATA"] = str(nltk_data_path)
 
     if str(nltk_data_path) not in nltk.data.path:
         nltk.data.path.insert(0, str(nltk_data_path))
 
-    # Azure define esta variable con la ubicación del modelo montado.
     model_directory = os.getenv("AZUREML_MODEL_DIR")
 
     if not model_directory:
@@ -39,7 +43,6 @@ def init() -> None:
 
     model_root = Path(model_directory)
 
-    # Busca el archivo aunque Azure lo coloque dentro de subcarpetas.
     model_files = list(
         model_root.rglob("modelo_sentimiento_v2.joblib")
     )
@@ -51,6 +54,7 @@ def init() -> None:
         )
 
     model_path = model_files[0]
+
     model = joblib.load(model_path)
 
     print(f"Modelo cargado desde: {model_path}")
@@ -122,9 +126,7 @@ def run(raw_data: str) -> dict[str, Any]:
                 }
             )
 
-        return {
-            "predictions": results
-        }
+        return {"predictions": results}
 
     except json.JSONDecodeError:
         return {
